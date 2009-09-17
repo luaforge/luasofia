@@ -2,24 +2,55 @@
 
 #include <sofia-sip/su_time.h>
 
-int native_su_time_print(lua_State*L)
+static int native_su_nanotime(lua_State* L)
 {
   int SWIG_arg = 0;
-  int arg2 = 32;
-  char buf[arg2];
-  char *arg1 = buf;
-  su_time_t *arg3 = NULL;
+  su_nanotime_t result;
+ 
+  SWIG_check_num_args("su_nanotime",0,0)
+ 
+  result = (su_nanotime_t)su_nanotime(NULL);
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+ 
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+static int native_su_monotime(lua_State* L)
+{
+  int SWIG_arg = 0;
+  su_nanotime_t result;
+ 
+  SWIG_check_num_args("su_monotime",0,0)
+ 
+  result = (su_nanotime_t)su_monotime(NULL);
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+ 
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+static int native_su_time_print(lua_State*L)
+{
+  int SWIG_arg = 0;
+  int len = 32;
+  char buf[len];
+  su_time_t *t = NULL;
  
   SWIG_check_num_args("su_time_print",1,1)
   if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("su_time_print",1,"su_time_t const *");
  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg3,SWIGTYPE_p_su_time_s,0))){
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&t,SWIGTYPE_p_su_time_s,0))){
     SWIG_fail_ptr("su_time_print",3,SWIGTYPE_p_su_time_s);
   }
  
-  su_time_print(arg1, arg2, (struct su_time_s const *)arg3);
+  su_time_print(buf, len, (struct su_time_s const *)t);
 
-  lua_pushstring(L, arg1);
+  lua_pushstring(L, buf);
   SWIG_arg++;
   return SWIG_arg;
   
@@ -30,6 +61,8 @@ fail:
 
 %}
 
+%native(su_nanotime) int native_su_nanotime(lua_State*L);
+%native(su_monotime) int native_su_monotime(lua_State*L);
 %native(su_time_print) int native_su_time_print(lua_State*L);
 
 /*

@@ -1,6 +1,11 @@
 require("luasofia")
 
 function time_test()
+
+  print (luasofia.su_nanotime())
+
+  print (luasofia.su_monotime())
+
   now = luasofia.su_now()
   sthen = now
 
