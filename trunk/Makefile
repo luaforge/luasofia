@@ -1,7 +1,7 @@
 
 all: luasofia.so
 
-su_wrap.c : su.i su_time.i
+su_wrap.c : su.i su_socket.i su_time.i
 	swig -v -Wall -Wextra \
 	     -I/usr/include \
 	     -I/usr/include/linux \

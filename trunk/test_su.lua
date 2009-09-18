@@ -1,10 +1,8 @@
+#!/usr/bin/lua
+
 require("luasofia")
 
 function time_test()
-
-  print (luasofia.su_nanotime())
-
-  print (luasofia.su_monotime())
 
   now = luasofia.su_now()
   sthen = now
@@ -26,15 +24,25 @@ function time_test()
   end
 end
 
-function do_init(root, p)
+function udpsocket()
 
+  su = luasofia.su_sockaddr_u()
+  su.su_family = luasofia.SU_PF_INET
+  luasofia.su_getlocalip(su)
+
+  s = luasofia.su_socket(su.su_family, luasofia.SU_SOCK_DGRAM, 0)
+  if s == luasofia.INVALID_SOCKET then 
+    su_perror("udpsocket: socket")
+    exit(1)
+  end
+
+  luasofia.su_close(s)
 end
 
-function do_destroy(root, p)
 
-end
+luasofia.su_init()
 
---luasofia.su_init()
+udpsocket()
 
 time_test()
 
